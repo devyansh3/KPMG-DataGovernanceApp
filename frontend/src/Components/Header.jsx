@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from "react";
 import { Dropdown } from "flowbite-react";
-import logo from "../assets/rb_7493.png";
+import logo from "../assets/kpmg.png";
 
 function Navbar() {
   useEffect(() => {
@@ -62,9 +62,6 @@ function Navbar() {
                 className="mr-3 h-10 rounded-lg"
                 alt="Flowbite Logo"
               />
-              <span className="self-center text-2xl font-light whitespace-nowrap dark:text-white">
-                KPMG
-              </span>
             </a>
           </div>
           <div className="flex items-center lg:order-2">

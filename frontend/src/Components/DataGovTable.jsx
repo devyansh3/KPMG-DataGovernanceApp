@@ -59,7 +59,7 @@ const DataGovTable = () => {
 
   return (
     <div className="p-5 max-w-2xl mx-auto">
-      <h1 className="text-2xl font-bold text-gray-800">
+      <h1 className="text-2xl font-bold text-gray-800 dark:text-white">
         Data Governance Questionnaire
       </h1>
       <div className="mt-5 bg-white shadow-md rounded-lg p-5">
