@@ -1,73 +1,27 @@
-import React, { useState } from "react";
-
-const questionsData = [
-  {
-    id: 1,
-    question:
-      "Are Data governance functions currently performed for at least one project?",
-    description:
-      "Data Governance Functions refers to Data Governed processes...",
-    marks: 1,
-    subQuestions: [
-      {
-        id: 1.1,
-        question: "Is there any Policy defined for specific Project?",
-      },
-      {
-        id: 1.2,
-        question: "Is there any Ownership defined for various systems used?",
-      },
-    ],
-  },
-  {
-    id: 2,
-    question:
-      "Is there a review process established to evaluate and improve data?",
-    description: "Review process involves getting feedback...",
-    marks: 2,
-    subQuestions: [
-      {
-        id: 2.1,
-        question:
-          "Is there any community within the organization to review the DG Process?",
-      },
-      { id: 2.2, question: "Does Data Governance follow defined Policies?" },
-    ],
-  },
-  {
-    id: 3,
-    question: "Is data security actively monitored within the organization?",
-    description:
-      "This involves monitoring access control, audits, and user management...",
-    marks: 3,
-    subQuestions: [
-      {
-        id: 3.1,
-        question: "Are data breach protocols in place?",
-      },
-      { id: 3.2, question: "Is there an active incident response team?" },
-    ],
-  },
-  {
-    id: 4,
-    question:
-      "Does your organization have a centralized data catalog system in place?",
-    description:
-      "A data catalog system helps in centralizing data discovery processes...",
-    marks: 4,
-    subQuestions: [
-      {
-        id: 4.1,
-        question: "Is the data catalog updated regularly?",
-      },
-      { id: 4.2, question: "Are users trained to use the data catalog?" },
-    ],
-  },
-];
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
 const DataGovTable = () => {
+  const [questionsData, setQuestionsData] = useState([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [responses, setResponses] = useState({});
+
+  useEffect(() => {
+    // Fetch data governance questions on component mount
+    const fetchQuestions = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:2001/questions/data-governance"
+        );
+        setQuestionsData(response.data);
+      } catch (error) {
+        console.error("Error fetching questions:", error);
+        alert("Failed to fetch questions. Please try again later.");
+      }
+    };
+
+    fetchQuestions();
+  }, []);
 
   const handleOptionChange = (option) => {
     const updatedResponses = { ...responses };
@@ -95,6 +49,10 @@ const DataGovTable = () => {
       alert("Quiz Completed. Thank you!");
     }
   };
+
+  if (questionsData.length === 0) {
+    return <p>Loading questions...</p>;
+  }
 
   const currentQuestion = questionsData[currentQuestionIndex];
   const userAnswer = responses[currentQuestionIndex]?.answer;
@@ -142,7 +100,7 @@ const DataGovTable = () => {
             </div>
 
             {currentQuestion.subQuestions.map((subQuestion) => (
-              <div key={subQuestion.id} className="mt-6">
+              <div key={subQuestion._id} className="mt-6">
                 <h3 className="text-sm font-semibold">
                   {subQuestion.question}
                 </h3>
@@ -167,21 +125,13 @@ const DataGovTable = () => {
           </>
         )}
 
-        {userAnswer === "No" && (
-          <p className="mt-4 text-red-600">
-            Quiz has ended. Thank you for your responses.
-          </p>
-        )}
-      </div>
-
-      {userAnswer === "Yes" && (
         <button
           className="mt-5 bg-blue-600 text-white py-2 px-4 rounded-lg shadow-md hover:bg-blue-700"
           onClick={handleNext}
         >
           {currentQuestionIndex + 1 < questionsData.length ? "Next" : "Finish"}
         </button>
-      )}
+      </div>
     </div>
   );
 };
