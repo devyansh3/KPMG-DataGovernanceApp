@@ -7,8 +7,8 @@ const router = express.Router();
 
 
 // Questions routes
-router.post('/questions/:topic', addQuestion);
-router.get('/questions/:topic', getQuestions);
+router.post('/:topic', addQuestion);
+router.get('/:topic', getQuestions);
 
 
 

@@ -23,38 +23,52 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
+// app.use(
+//     cors({
+//         credentials: true,
+//         origin: (origin, callback) => {
+//             if (!origin) return callback(null, true); // Allow requests with no origin (e.g., mobile apps)
+//             const allowedOrigins = [process.env.ALLOWED_ORIGIN];
+//             if (allowedOrigins.includes(origin)) {
+//                 callback(null, true);
+//             } else {
+//                 callback(new Error(ERROR_MESSAGES.CORS_ERROR));
+//             }
+//         }
+//     })
+// );
+
+
 app.use(
     cors({
-        credentials: true,
-        origin: (origin, callback) => {
-            // Allow requests with no origin (like mobile apps or curl requests)
-            if (!origin) return callback(null, true);
-
-            //  Check if the origin is allowed
-            const allowedOrigins = [process.env.ALLOWED_ORIGIN];
-            if (allowedOrigins.includes(origin)) {
-                callback(null, true);
-            } else {
-                callback(new Error(ERROR_MESSAGES.CORS_ERROR));
-            }
-        }
+        origin: "http://localhost:5173", // Allow your frontend's origin
+        credentials: true,               // Allow cookies and other credentials
+        methods: ["GET", "POST", "PUT", "DELETE"], // Allow specific HTTP methods
+        allowedHeaders: ["Content-Type", "Authorization"], // Allow necessary headers
     })
 );
 
-// MongoDB connection
-// MongoDB connection
-mongoose.connect(process.env.DB_URL)
-    .then(() => console.log('MongoDB connected'))
-    .catch((err) => console.log(err));
 
-app.use('', routes);
+// MongoDB connection
+console.log("env", process.env.DB_URL)
+mongoose.connect('mongodb://127.0.0.1:27017/datagovernance')
+    .then(() => {
+        console.log('MongoDB connected');
+        startServer(); // Start the server after successful connection
+    })
+    .catch((err) => {
+        console.error('MongoDB connection error:', err);
+        process.exit(1); // Exit if MongoDB connection fails
+    });
+
+
+// Routes
+app.use('/', routes);
 
 // Server setup
-startServer();
-
 function startServer() {
-    const port = Number(process.env.PORT);
-    console.log(new Date().toISOString(), `Environment Name: ${process.env.NODE_ENV}`);
+    const port = Number(process.env.PORT) || 3000;
+    console.log(new Date().toISOString(), `Environment: ${process.env.NODE_ENV}`);
     app.listen(port, () => {
         console.log(new Date().toISOString(), `Server is listening on port ${port}`);
     });

@@ -3,6 +3,7 @@ const { saveResponses } = require("../services/responseService");
 exports.saveResponses = async (req, res) => {
     try {
         const responseData = req.body;
+        console.log("topic-", req.params.topic)
         const newResponse = await saveResponses(responseData);
         res.status(201).json(newResponse);
     } catch (error) {

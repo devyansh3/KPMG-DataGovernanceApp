@@ -4,7 +4,6 @@ const customerDAO = require("../dao/customerDAO");
 const { BOOKING_STATUS } = require("../utils/constants");
 const customerService = require("./customerService");
 const mongoose = require("mongoose");
-const { notifyBookingConfirmation } = require("../whatsapp/whatsappManager");
 const { formatName } = require("../utils/helper");
 
 const counterDao = new CounterDao();
@@ -108,7 +107,6 @@ exports.createNewBooking = async (bookingData, store) => {
     };
 
     const newBooking = await bookingDAO.createBooking(newBookingData, session);
-    await notifyBookingConfirmation(newBooking);
     await session.commitTransaction();
     return newBooking;
   } catch (error) {

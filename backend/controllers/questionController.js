@@ -14,6 +14,7 @@ exports.addQuestion = async (req, res) => {
 exports.getQuestions = async (req, res) => {
     try {
         const topic = req.params.topic;
+        console.log("topic", topic)
         const questions = await getQuestions(topic);
         res.status(200).json(questions);
     } catch (error) {

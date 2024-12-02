@@ -7,7 +7,7 @@ const router = express.Router();
 
 
 // Responses routes
-router.post('/responses', saveResponses);
+router.post('/:topic', saveResponses);
 
 
 

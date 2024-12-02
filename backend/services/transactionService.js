@@ -2,7 +2,6 @@ const transactionDAO = require("../dao/transactionDAO");
 const bookingDAO = require("../dao/bookingDAO");
 const CounterDao = require("../dao/CounterDao");
 const { getCustomerById } = require("./customerService");
-const { notifyPaymentConfirmation } = require("../whatsapp/whatsappManager");
 const mongoose = require("mongoose");
 
 const counterDao = new CounterDao();
@@ -95,10 +94,6 @@ exports.createTransactionAndUpdateBooking = async (
       { new: true, session } // Pass the session here
     );
 
-    await notifyPaymentConfirmation({
-      txnInfo: newTxn,
-      bookingInfo: updatedBooking,
-    });
 
     await session.commitTransaction(); // Commit the transaction
     return newTxn._id;
