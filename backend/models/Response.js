@@ -7,7 +7,8 @@ const responseSchema = new Schema({
     answers: [
         {
             questionId: { type: Number, required: true },
-            answer: { type: String },
+            answerType: { type: String, enum: ['Yes', 'No'], required: true }, // Yes/No field
+            answer: { type: String }, // Explanation field
             subAnswers: [
                 {
                     subQuestionId: { type: String, required: true },
